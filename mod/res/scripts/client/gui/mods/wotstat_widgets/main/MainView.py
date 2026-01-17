@@ -40,7 +40,20 @@ storage = WidgetStorage.instance()
 lastWidgetId = 0
 lastLoadIsBattle = False
 
-HANGAR_STATE_CLASS = () # type: Tuple[type, ...]
+try:
+  from gui.impl.lobby.hangar.states import DefaultHangarState
+  from comp7.gui.impl.lobby.hangar.states import Comp7RootHangarState
+  from comp7_light.gui.impl.lobby.hangar.states import Comp7LightRootHangarState
+  from frontline.gui.impl.lobby.states import FrontlineRootHangarState
+except:
+  HANGAR_STATE_CLASS = ()
+else:
+  HANGAR_STATE_CLASS = (
+    DefaultHangarState,
+    Comp7LightRootHangarState,
+    Comp7RootHangarState,
+    FrontlineRootHangarState
+  )
 
 class MainView(View):
   settingsCore = dependency.descriptor(ISettingsCore) # type: ISettingsCore
@@ -60,15 +73,6 @@ class MainView(View):
         self.lobbyStateMachine = getLobbyStateMachine()
       except:
         self.lobbyStateMachine = None
-    
-    global HANGAR_STATE_CLASS
-    try:
-      from gui.impl.lobby.hangar.states import DefaultHangarState
-      from comp7_light.gui.impl.lobby.hangar.states import Comp7LightRootHangarState
-    except:
-      HANGAR_STATE_CLASS = ()
-    else:
-      HANGAR_STATE_CLASS = (DefaultHangarState, Comp7LightRootHangarState)
 
   def _populate(self):
     super(MainView, self)._populate()
@@ -164,7 +168,6 @@ class MainView(View):
 
   def _onVisibleRouteChanged(self, routeInfo): # type: (VisibleRouteInfo) -> None
 
-    # isRoot = routeInfo.state.getFlags() & LobbyStateFlags.HANGAR
     isRoot = isinstance(routeInfo.state, HANGAR_STATE_CLASS)
   
     if(self.isRoot == isRoot): return
