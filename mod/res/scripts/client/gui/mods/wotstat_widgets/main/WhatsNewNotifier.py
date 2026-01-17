@@ -98,6 +98,12 @@ MOD_RELEASE_NOTES = [
       '• Добавлена поддержка виджета на отметки (сам виджет будет доступен позже)',
     'en':
       '• Fix default layer positioning which broke in 2.0'
+  },
+  {
+    'ru':
+      '• Исправлен баг отображения виджетов в ангаре Натиска',
+    'en':
+      '• Fixed a bug displaying widgets in the Onslaught hangar'
   }
 ]
 
